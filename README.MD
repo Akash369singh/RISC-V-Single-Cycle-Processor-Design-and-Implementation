@@ -32,8 +32,8 @@ The processor executes each instruction in one clock cycle, illustrating the bas
 
 ## 📷 Image References
 
-- Design Diagram: -  
-- Simulation Waveform:
+- Design Diagram: -  (https://github.com/Akash369singh/RISC-V-Single-Cycle-Processor-Design-and-Implementation/blob/main/Design_and_Simulation_Images/Design%20of%20ISA.png)
+- Simulation Waveform: (https://github.com/Akash369singh/RISC-V-Single-Cycle-Processor-Design-and-Implementation/blob/main/Design_and_Simulation_Images/samulation_image_02.png)
    Captured using GTKWave during simulation with Icarus Verilog.
 
 If you use or share these images, please credit accordingly.
@@ -83,7 +83,8 @@ Thanks to the RISC-V community and the open-source contributors whose resources 
 ## 📞 Contact
 
 Feel free to reach out for questions, suggestions, or collaborations!  
-**Ankit Ghanshyam Choudhary**  
+**Akash Singh** 
+[Linkdin] (https://www.linkedin.com/in/akash369singh/) 
 [GitHub Profile](https://github.com/Akash369singh)  
 [Gmail] (mr.akash369singh@gmail.com)
 

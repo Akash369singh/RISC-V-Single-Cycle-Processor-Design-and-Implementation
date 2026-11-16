@@ -87,6 +87,8 @@ Thanks to the RISC-V community and the open-source contributors whose resources 
 surfer waveform     >>   surfer "Single Cycle.vcd"
 GTKWave waveform     >>   gtkwave "./Simulation/Single Cycle.vcd"
 Terminal simulation  >>  vvp simulation.out
+
+
 ## 📞 Contact
 
 Feel free to reach out for questions, suggestions, or collaborations!  

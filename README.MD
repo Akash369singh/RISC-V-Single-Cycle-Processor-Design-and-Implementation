@@ -80,6 +80,12 @@ Thanks to the RISC-V community and the open-source contributors whose resources 
 
 ---
 
+🛠️ How to Run the Project
+
+>>   iverilog -g2012 -I "source code" -o simulation.out "source code"/*.v Testbench/*.v
+>>   vvp simulation.out
+>>   surfer "Single Cycle.vcd"
+
 ## 📞 Contact
 
 Feel free to reach out for questions, suggestions, or collaborations!  

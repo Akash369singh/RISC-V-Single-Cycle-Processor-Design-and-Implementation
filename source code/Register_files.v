@@ -19,29 +19,36 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Reg_file(A1,A2,A3,WD3,clk,WE3,rst,RD1,RD2);
-      input clk,rst,WE3;
-      input [4:0] A1,A2,A3;
-      input [31:0] WD3;
-      output [31:0] RD1,RD2;
-      
-      //creation of memory
-      reg [31:0] Registers[31:0]; //The size of registers is of 32 bits and there are 32 registers in the memory
-      
-      //assigning read from the registers
-      assign RD1 = (~rst) ? 32'd0 : Registers[A1];
-      
-      assign RD2 = (~rst) ? 32'd0 : Registers[A2];
-      
-      always @(posedge clk) begin
-         if (WE3)
-         begin
-         Registers[A3] <= WD3;
-         end
-      end
 
-      initial begin
-          Registers[5] = 32'h00000005;
-          Registers[6] = 32'h00000004;
-      end
+module Reg_file(A1,A2,A3,WD3,clk,WE3,rst,RD1,RD2);
+
+    input clk,rst,WE3;
+    input [4:0] A1,A2,A3;
+    input [31:0] WD3;
+    output [31:0] RD1,RD2;
+
+    // Creation of register memory
+    reg [31:0] Registers[31:0];
+
+    // Read operation with x0 protection
+    assign RD1 = (~rst) ? 32'd0 :
+                 (A1 == 5'd0) ? 32'd0 : Registers[A1];
+
+    assign RD2 = (~rst) ? 32'd0 :
+                 (A2 == 5'd0) ? 32'd0 : Registers[A2];
+
+    // Write operation with x0 protection
+    always @(posedge clk) begin
+        if (WE3 && (A3 != 5'd0)) begin
+            Registers[A3] <= WD3;
+        end
+    end
+
+    // Initial register values
+    initial begin
+        Registers[0] = 32'h00000000;
+        Registers[5] = 32'h00000005;
+        Registers[6] = 32'h00000004;
+    end
+
 endmodule

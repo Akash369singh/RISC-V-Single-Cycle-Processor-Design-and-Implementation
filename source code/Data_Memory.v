@@ -20,28 +20,32 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
+
+
 module Data_Memory(A,WE,clk,WD,RD);
 
-   //Input/Output declaration
-   input[31:0] A,WD;
+   // Input and Output declaration
+   input [31:0] A,WD;
    input clk,WE;
    output [31:0] RD;
-   
-   //Declaring data memory
-   reg [31:0] Data [1023:0];    //It is declaring an array memory which consists of 1024 32-bit registers.
-   //Assigning read function
-   assign RD = (WE == 1'b0) ? Data[A] : 32'd0;
-    
-   //To simulate that memory location 28 holds a specific value
+
+   // Declaring 4 KB Data Memory
+   reg [31:0] Data [1023:0];
+
+   // Read operation using word-aligned address
+   assign RD = (WE == 1'b0) ? Data[A[11:2]] : 32'd0;
+
+   // Initial memory values
    initial begin
       Data[28] = 32'h00000020;
       Data[40] = 32'h00000002;
-    end
-   //Assigning write function
+   end
+
+   // Write operation
    always @(posedge clk) begin
-         if (WE)
-         begin
-         Data[A] <= WD;
-         end
-   end    
+      if (WE) begin
+         Data[A[11:2]] <= WD;
+      end
+   end
+
 endmodule

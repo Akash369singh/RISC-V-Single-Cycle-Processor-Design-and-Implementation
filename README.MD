@@ -84,8 +84,9 @@ Thanks to the RISC-V community and the open-source contributors whose resources 
 
 >>   iverilog -g2012 -I "source code" -o simulation.out "source code"/*.v Testbench/*.v
 >>   vvp simulation.out
->>   surfer "Single Cycle.vcd"
-
+surfer waveform     >>   surfer "Single Cycle.vcd"
+GTKWave waveform     >>   gtkwave "./Simulation/Single Cycle.vcd"
+Terminal simulation  >>  vvp simulation.out
 ## 📞 Contact
 
 Feel free to reach out for questions, suggestions, or collaborations!  

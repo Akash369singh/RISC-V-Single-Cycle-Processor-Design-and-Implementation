@@ -1,0 +1,71 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 11/14/2026 04:23:30 PM
+// Design Name: 
+// Module Name: Single_Cycle_Top_Tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+
+`timescale 1ns / 1ps
+
+module Single_Cycle_Top_Tb();
+
+    reg clk = 1'b0;
+    reg rst;
+
+    Single_Cycle_Top dut (
+        .clk(clk),
+        .rst(rst)
+    );
+
+    // Clock: 100 ns period
+    always #50 clk = ~clk;
+
+    initial begin
+        $dumpfile("Simulation/Single Cycle.vcd");
+        $dumpvars(0, Single_Cycle_Top_Tb);
+
+        // Reset
+        rst = 1'b0;
+        #100;
+        rst = 1'b1;
+
+        // Instruction 1: OR x7, x5, x6
+        #60;
+        if (dut.PC_Top === 32'd4)
+            $display("PASS: PC after Instruction 1");
+        else
+            $display("FAIL: PC after Instruction 1 | Actual=%h", dut.PC_Top);
+
+        if (dut.Register_File.Registers[7] === 32'd5)
+            $display("PASS: OR Instruction | x7 = 5");
+        else
+            $display("FAIL: OR Instruction | x7 = %h",
+                     dut.Register_File.Registers[7]);
+
+        // Instruction 2: AND x8, x5, x6
+        #100;
+        if (dut.PC_Top === 32'd8)
+            $display("PASS: PC after Instruction 2");
+        else
+            $display("FAIL: PC after Instruction 2 | Actual=%h", dut.PC_Top);
+
+        if (dut.Register_File.Registers[8] === 32'd4)
+            $display("PASS: AND Instruction | x8 = 4");
+        else
+            $display("FAIL: AND Instruction | x8 = %h",
+                     dut.Register_File.Registers[8]);
+
+        $display("--------------------------------");
+        $display("PROCESSOR INTEGRATION TEST COMPLETED");
+        $display("--------------------------------");
+
+        $finish;
+    end
+
+endmodule
+

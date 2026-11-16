@@ -1,59 +1,85 @@
 
 `timescale 1ns / 1ps
 
-module Single_Cycle_Top_Tb();
+module Sign_Extend_Tb;
 
-    reg clk = 1'b0;
-    reg rst;
+    reg [31:0] In;
+    reg [1:0] ImmSrc;
+    wire [31:0] Imm_Ext;
 
-    Single_Cycle_Top dut (
-        .clk(clk),
-        .rst(rst)
+    integer passed = 0;
+    integer failed = 0;
+
+    Sign_Extend uut (
+        .In(In),
+        .Imm_Ext(Imm_Ext),
+        .ImmSrc(ImmSrc)
     );
 
-    // Clock: 100 ns period
-    always #50 clk = ~clk;
+    task check;
+        input [31:0] expected;
+        input [8*30:1] test_name;
+        begin
+            #10;
+            if (Imm_Ext === expected) begin
+                $display("PASS: %0s | Expected=%h Actual=%h",
+                         test_name, expected, Imm_Ext);
+                passed = passed + 1;
+            end
+            else begin
+                $display("FAIL: %0s | Expected=%h Actual=%h",
+                         test_name, expected, Imm_Ext);
+                failed = failed + 1;
+            end
+        end
+    endtask
 
     initial begin
-        $dumpfile("Simulation/Single Cycle.vcd");
-        $dumpvars(0, Single_Cycle_Top_Tb);
-
-        // Reset
-        rst = 1'b0;
-        #100;
-        rst = 1'b1;
-
-        // Instruction 1: OR x7, x5, x6
-        #60;
-        if (dut.PC_Top === 32'd4)
-            $display("PASS: PC after Instruction 1");
-        else
-            $display("FAIL: PC after Instruction 1 | Actual=%h", dut.PC_Top);
-
-        if (dut.Register_File.Registers[7] === 32'd5)
-            $display("PASS: OR Instruction | x7 = 5");
-        else
-            $display("FAIL: OR Instruction | x7 = %h",
-                     dut.Register_File.Registers[7]);
-
-        // Instruction 2: AND x8, x5, x6
-        #100;
-        if (dut.PC_Top === 32'd8)
-            $display("PASS: PC after Instruction 2");
-        else
-            $display("FAIL: PC after Instruction 2 | Actual=%h", dut.PC_Top);
-
-        if (dut.Register_File.Registers[8] === 32'd4)
-            $display("PASS: AND Instruction | x8 = 4");
-        else
-            $display("FAIL: AND Instruction | x8 = %h",
-                     dut.Register_File.Registers[8]);
+        $dumpfile("Simulation/Sign_Extend.vcd");
+        $dumpvars(0, Sign_Extend_Tb);
 
         $display("--------------------------------");
-        $display("PROCESSOR INTEGRATION TEST COMPLETED");
+        $display("SIGN EXTENSION TESTING");
         $display("--------------------------------");
 
+        // I-type: +5
+        In = 32'h00500000;
+        ImmSrc = 2'b00;
+        check(32'h00000005, "I-type Positive");
+
+        // I-type: -1
+        In = 32'hFFF00000;
+        ImmSrc = 2'b00;
+        check(32'hFFFFFFFF, "I-type Negative");
+
+        // S-type: +5
+        In = 32'h00500280;
+        ImmSrc = 2'b01;
+        check(32'h00000005, "S-type Positive");
+
+        // B-type: +8
+        In = 32'h00000400;
+        ImmSrc = 2'b10;
+        check(32'h00000008, "B-type Positive");
+
+        // B-type: -4
+        In = 32'hFE000E80;
+        ImmSrc = 2'b10;
+        check(32'hFFFFFFFC, "B-type Negative");
+
+        $display("--------------------------------");
+        $display("TOTAL TESTS : %0d", passed + failed);
+        $display("PASSED      : %0d", passed);
+        $display("FAILED      : %0d", failed);
+
+        if (failed == 0)
+            $display("STATUS: ALL TESTS PASSED");
+        else
+            $display("STATUS: TESTS FAILED");
+
+        $display("--------------------------------");
         $finish;
     end
 
 endmodule
+

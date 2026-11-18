@@ -89,6 +89,8 @@ GTKWave waveform     >>   gtkwave "./Simulation/Single Cycle.vcd"
 Terminal simulation  >>  vvp simulation.out
 
 
+//Samulation      https://risc-v-animation.vercel.app/
+
 ## 📞 Contact
 
 Feel free to reach out for questions, suggestions, or collaborations!  
